@@ -1,9 +1,9 @@
 # Artificial Intelligence Project
 Project created and made by :
 - Meryem Missaoui Hajib - Database Design/Implementation + Frontend Developement - GUIs (HTML + CSS + JS).
-- Mehdi Alkadi - Backend Developement. RAG Design + Pipline/Endpoint configuration.
+- Mehdi Alkadi - Backend Developement. RAG Design + Pipeline/Endpoint configuration.
 - Ouafae Hmajou - Database Design/Implementation + Frontend Developement - GUIs (HTML + CSS + JS).
-- Amr Agouriane - Backend Developement. RAG Design + Pipline/Endpoint configuration.
+- Amr Agouriane - Backend Developement. RAG Design + Pipeline/Endpoint configuration.
 
 The project is about a smart expense chatbot, where the user submits his financial data (either manually or in bulk via csv file upload - for the sake of simplicity -).
   - The project implement RAG (Retrieval Augmented Generation) system, as seen in the Lab 6.
