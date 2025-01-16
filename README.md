@@ -5,7 +5,7 @@ Project created and made by :
 - Ouafae Hmajou - Database Design/Implementation + Frontend Developement - GUIs (HTML + CSS + JS).
 - Amr Agouriane - Backend Developement. RAG Design + Pipeline/Endpoint configuration.
 
-The project is about a smart expense chatbot, where the user submits his financial data (either manually or in bulk via CSV - Comma Separated Values - file upload *for the sake of simplicity*).
+The project is about a smart expense chatbot, where the user submits his financial data (either manually or in bulk via CSV - Comma Separated Values - file upload *for the sake of simplicity*) and can later querie the chatbot about this data.
   - The project implement RAG (Retrieval Augmented Generation) system, as seen in the Lab 6.
   - The application interacts with the user via a GUI (Graphical User Interface) coded in HTML. Data persistance is done via SQLite3, which is a core function of python.
   - The used Chatbot is Google Gemini, and the used embedding model is OpenAI text-embedding-3-large.
