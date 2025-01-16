@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+        form {
+            margin-top: 2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+        .popup.success {
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+        .popup.error {
+            border-color: #f44336;
+            color: #f44336;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        nav {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        nav a span {
+            margin-right: 0.5rem;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const message = "{{ message }}";
+            const success = {{ 'true' if success else 'false' }};
+            const popup = document.querySelector('.popup');
+            const overlay = document.querySelector('.overlay');
+
+            if (message) {
+                popup.textContent = message;
+                popup.classList.add(success ? 'success' : 'error');
+                popup.style.display = 'block';
+                overlay.style.display = 'block';
+
+                // Close the popup after 3 seconds
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    overlay.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Upload CSV File</h1>
+        <nav>
+            <a href="/" style="text-decoration: none;">
+                <span>🏠</span> Home
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Upload Your Transactions</h2>
+        <form action="/upload_csv" method="POST" enctype="multipart/form-data">
+            <label for="csv_file">Choose a CSV file to upload:</label>
+            <input type="file" id="csv_file" name="file" accept=".csv" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <div class="overlay"></div>
+    <div class="popup"></div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        header a {
+            text-decoration: none;
+            color: white;
+            background-color: #45a049;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        .chat-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-window {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f4f4f4;
+            height: 500px; /* Increased height for better visuals */
+        }
+        .chat-message {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+        .chat-message .message {
+            max-width: 80%; /* Adjust width to make messages look better */
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+        }
+        .chat-message.user .message {
+            background-color: #DCF8C6;
+            color: #333;
+            border-radius: 10px 0 10px 10px;
+        }
+        .chat-message.bot .message {
+            background-color: #EAEAEA;
+            color: #333;
+            border-radius: 0 10px 10px 10px;
+        }
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 0.5rem;
+        }
+        .chat-input button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .chat-input button:hover {
+            background-color: #45a049;
+        }
+        .loading {
+            text-align: center;
+            padding: 1rem;
+            display: none;
+        }
+        .clear-chat {
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .clear-chat button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .clear-chat button:hover {
+            background-color: #e53935;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatForm = document.querySelector('.chat-input');
+            const chatWindow = document.querySelector('.chat-window');
+            const inputField = chatForm.querySelector('input[type="text"]');
+            const loadingIndicator = document.querySelector('.loading');
+            const clearChatButton = document.querySelector('.clear-chat button');
+
+            chatForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const userMessage = inputField.value.trim();
+                if (!userMessage) return;
+
+                // Add user message to the chat window
+                addMessageToChat('user', userMessage);
+                inputField.value = '';
+
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+
+                // Send the message to the backend
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: userMessage }),
+                    });
+                    const data = await response.json();
+
+                    // Add bot message to the chat window
+                    addMessageToChat('bot', data.response);
+                } catch (error) {
+                    addMessageToChat('bot', 'Error: Unable to fetch response.');
+                } finally {
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                }
+            });
+
+            clearChatButton.addEventListener('click', () => {
+                chatWindow.innerHTML = ''; // Clear the chat window
+            });
+
+            function addMessageToChat(sender, message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message', sender);
+
+                const messageContent = document.createElement('div');
+                messageContent.classList.add('message');
+                messageContent.textContent = message;
+
+                messageDiv.appendChild(messageContent);
+                chatWindow.appendChild(messageDiv);
+
+                // Scroll to the bottom
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Smart Expense Tracker Chatbot</h1>
+        <a href="/" style="text-decoration: none; display: inline-flex; align-items: center; background-color: #4CAF50; color: white; padding: 0.5rem 1rem; border-radius: 5px;">
+            <span style="margin-right: 0.5rem;">🏠</span> Home
+        </a>
+    </header>
+
+    <div class="chat-container">
+        <div class="chat-window"></div>
+        <div class="loading">Loading...</div>
+        <form class="chat-input">
+            <input type="text" placeholder="Ask a question..." />
+            <button type="submit">Send</button>
+        </form>
+        <div class="clear-chat">
+            <button>Clear Chat</button>
+        </div>
+    </div>
+</body>
+</html>
